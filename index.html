@@ -1,0 +1,298 @@
+<!doctype html>
+<!-- Chat Media Collector's home page by Orbit Fox Studio, published at https://orbitfoxstudio.github.io/chat-media-collector/
+     (GitHub repository orbitfoxstudio/chat-media-collector, file index.html; images and the trailer in assets/).
+     The Store badge images load from Microsoft (get.microsoft.com), as the badge maker at apps.microsoft.com/badge gives them. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat Media Collector: save a Telegram chat's photos and videos in posting order</title>
+<meta name="description" content="A Windows app that saves every photo and video from a Telegram chat or channel into one folder, numbered in posting order: 0001.jpg, 0002.mp4… Reuses what Unigram already downloaded and keeps chats in sync. Free 7-day trial on the Microsoft Store.">
+<link rel="canonical" href="https://orbitfoxstudio.github.io/chat-media-collector/">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Chat Media Collector">
+<meta property="og:description" content="Every photo and video from a Telegram chat, in one folder, in posting order. Free 7-day trial on the Microsoft Store.">
+<meta property="og:url" content="https://orbitfoxstudio.github.io/chat-media-collector/">
+<meta property="og:image" content="https://orbitfoxstudio.github.io/chat-media-collector/assets/poster.jpg">
+<meta property="og:site_name" content="Orbit Fox Studio">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Chat Media Collector",
+  "operatingSystem": "Windows 10 version 1809 or later, Windows 11 (x64)",
+  "applicationCategory": "MultimediaApplication",
+  "description": "Saves every photo and video from a Telegram chat or channel into one folder, numbered in posting order.",
+  "url": "https://orbitfoxstudio.github.io/chat-media-collector/",
+  "downloadUrl": "https://apps.microsoft.com/detail/9PD8CH2DHF9C",
+  "image": "https://orbitfoxstudio.github.io/chat-media-collector/assets/poster.jpg",
+  "author": { "@type": "Organization", "name": "Orbit Fox Studio", "url": "https://github.com/orbitfoxstudio" }
+}
+</script>
+<style>
+  :root {
+    --bg: #f7f7f9; --card: #ffffff; --text: #1b1c1f; --muted: #5f636b; --line: #e3e4e8;
+    --accent: #2a66db; --accent-soft: #e8efff; --green: #1e8a4c;
+    --hero-top: #0b1530; --hero-bottom: #14295a; --hero-text: #ffffff; --hero-muted: #b8c4df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1b1f; --card: #232328; --text: #f3f3f5; --muted: #a4a4ae; --line: #34343b;
+      --accent: #6f9bff; --accent-soft: #24304d; --green: #4fd08b;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif; }
+  img, video { max-width: 100%; height: auto; display: block; }
+  .hero-grid > *, .feature > *, .problem > *, .extras > * { min-width: 0; }
+  a { color: var(--accent); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+  /* Hero: the same navy as the trailer, in both themes */
+  .hero { background: radial-gradient(900px 520px at 80% 0%, rgba(47, 111, 235, 0.35), transparent 70%),
+                      linear-gradient(160deg, var(--hero-top), var(--hero-bottom));
+          color: var(--hero-text); padding-bottom: 64px; }
+  .hero a { color: var(--hero-text); }
+  nav { display: flex; align-items: center; gap: 24px; padding: 18px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; text-decoration: none; margin-right: auto; }
+  .brand img { width: 34px; height: 34px; border-radius: 8px; }
+  nav .links a { color: var(--hero-muted); text-decoration: none; margin-left: 20px; font-size: 15px; }
+  nav .links a:hover { color: var(--hero-text); }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 48px; align-items: center; padding-top: 36px; }
+  h1 { font-size: clamp(34px, 5vw, 52px); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 18px; text-wrap: balance; }
+  .lead { color: var(--hero-muted); font-size: 19px; margin: 0 0 26px; }
+  .lead code { color: #cfe0ff; font: 600 16px/1 "Cascadia Mono", Consolas, monospace; }
+  .cta { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .cta .badge img { width: 200px; height: auto; }
+  .cta small { color: var(--hero-muted); font-size: 14px; line-height: 1.4; }
+  .video { border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.16);
+           box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); background: #000; aspect-ratio: 16 / 9; }
+  .video video { width: 100%; height: 100%; }
+
+  section { padding: 72px 0 0; }
+  h2 { font-size: clamp(26px, 3.4vw, 34px); line-height: 1.2; letter-spacing: -0.01em; margin: 0 0 12px; text-wrap: balance; }
+  .intro { color: var(--muted); max-width: 720px; margin: 0 0 8px; }
+
+  .problem { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 28px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; }
+  .card h3 { margin: 0 0 8px; font-size: 19px; }
+  .card p { margin: 0; color: var(--muted); }
+  .files { font: 14px/1.9 "Cascadia Mono", Consolas, monospace; color: var(--muted); margin-top: 12px; }
+  .files b { color: var(--text); font-weight: 600; }
+  .files .tag { color: var(--accent); }
+
+  .feature { display: grid; grid-template-columns: 1fr 1.35fr; gap: 44px; align-items: center; margin-top: 56px; }
+  .feature:nth-of-type(even) .shot { order: -1; }
+  .feature h3 { font-size: 24px; line-height: 1.25; margin: 0 0 10px; }
+  .feature p { color: var(--muted); margin: 0 0 10px; }
+  .feature ul { color: var(--muted); padding-left: 20px; margin: 0; }
+  .shot { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 18px 50px rgba(15, 25, 50, 0.14); }
+
+  .extras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 56px; }
+  .extras .card h3 { font-size: 17px; }
+  .extras .card p { font-size: 15px; }
+
+  .faq details { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 0 20px; margin-top: 12px; }
+  .faq summary { cursor: pointer; font-weight: 600; padding: 16px 0; list-style-position: outside; }
+  .faq details p { color: var(--muted); margin: 0 0 16px; }
+
+  .closing { text-align: center; padding: 80px 0 72px; }
+  .closing .cta { justify-content: center; }
+  .closing small { color: var(--muted); }
+  footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; padding: 24px 0 40px; }
+  footer p { margin: 4px 0; }
+
+  @media (max-width: 860px) {
+    .hero-grid, .feature, .problem { grid-template-columns: 1fr; gap: 24px; }
+    .feature:nth-of-type(even) .shot { order: 0; }
+    .extras { grid-template-columns: repeat(2, 1fr); }
+    nav .links a:not(:last-child) { display: none; }
+  }
+  @media (max-width: 480px) {
+    .extras { grid-template-columns: 1fr; }
+    nav { gap: 12px; }
+    section { padding-top: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <nav>
+      <a class="brand" href="./"><img src="assets/logo.png" alt="" width="34" height="34">Chat Media Collector</a>
+      <div class="links">
+        <a href="#features">Features</a>
+        <a href="#faq">FAQ</a>
+        <a href="privacy/">Privacy</a>
+      </div>
+    </nav>
+    <div class="hero-grid">
+      <div>
+        <h1>Every photo and video from a Telegram chat, in one folder.</h1>
+        <p class="lead">Chat Media Collector saves a chat's or channel's photos and videos to your PC, numbered in the
+          order they were posted: <code>0001.jpg</code>, <code>0002.mp4</code>, <code>0003.jpg</code>… and keeps the
+          folder up to date.</p>
+        <div class="cta">
+          <a class="badge" href="https://apps.microsoft.com/detail/9PD8CH2DHF9C?referrer=appbadge&amp;mode=direct">
+            <img src="https://get.microsoft.com/images/en-us%20light.svg" alt="Get it from Microsoft" width="200" height="72">
+          </a>
+          <small>Free 7-day trial, then buy once.<br>Windows 10 and 11 (64-bit)</small>
+        </div>
+      </div>
+      <div class="video">
+        <video controls playsinline preload="metadata" poster="assets/poster.jpg" width="1280" height="720">
+          <source src="assets/trailer.mp4" type="video/mp4">
+          <a href="assets/trailer.mp4">Watch the 34-second trailer</a>
+        </video>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <h2>Telegram keeps a chat's media scattered</h2>
+    <p class="intro">Photos and videos end up in the app's cache, split by type, under names that mean nothing. Chat
+      Media Collector puts them back together, one folder per chat, in the order they were posted.</p>
+    <div class="problem">
+      <div class="card">
+        <h3>Before: the cache</h3>
+        <p>Spread across folders, with no order you can follow.</p>
+        <div class="files">…\photos\5229911934_y.jpg<br>…\videos\5301172984.mp4<br>…\documents\IMG_4471.JPG<br>…\photos\4986623010_w.jpg</div>
+      </div>
+      <div class="card">
+        <h3>After: Pictures\Telegram\Family Trip 2026</h3>
+        <p>Numbered in posting order. Photos sent as an album stay together.</p>
+        <div class="files"><b>0001</b>.jpg<br><b>0002</b>.mp4<br><b>0003</b><span class="tag"> (album 2)</span>.jpg<br><b>0004</b><span class="tag"> (album 2)</span>.jpg</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <h2>How it works</h2>
+
+    <div class="feature">
+      <div>
+        <h3>See what's in a chat before you start</h3>
+        <p>Pick a chat or channel and see how many photos and videos it has, how big they are, and how much is already on
+          your PC.</p>
+        <ul>
+          <li>Choose photos, videos, files, or all of them</li>
+          <li>All time, or just recent months</li>
+          <li>Three name styles: number, date + number, or chat name + number</li>
+        </ul>
+      </div>
+      <img class="shot" src="assets/01-pick-a-chat.webp" width="1600" height="900" loading="lazy"
+           alt="A chat's preview: 1,178 photos, 147 videos, 4.3 GB, 823 MB already on this PC">
+    </div>
+
+    <div class="feature">
+      <div>
+        <h3>Reuses what Unigram already downloaded</h3>
+        <p>If you use Unigram, photos and videos it already has are linked into the folder instead of downloaded again,
+          so they take no extra space on your drive.</p>
+        <ul>
+          <li>Runs in the background: pause, stop and carry on later</li>
+          <li>Queue several chats</li>
+          <li>Close the window and it keeps going from the tray</li>
+        </ul>
+      </div>
+      <img class="shot" src="assets/02-collecting.webp" width="1600" height="900" loading="lazy"
+           alt="Saving 482 of 1,325 files, with 201 taken from this PC and 280 downloaded">
+    </div>
+
+    <div class="feature">
+      <div>
+        <h3>One folder per chat, in posting order</h3>
+        <p>Every file gets the next number, so the folder reads like the chat. Run it again later and only the new posts
+          are added, with the numbers that come next.</p>
+      </div>
+      <img class="shot" src="assets/03-done.webp" width="1600" height="900" loading="lazy"
+           alt="1,325 photos and videos saved in posting order in 11 minutes">
+    </div>
+
+    <div class="feature">
+      <div>
+        <h3>Keep chats in sync</h3>
+        <p>Turn on sync for a chat and new photos and videos are added to its folder on a schedule. Every collection,
+          including scheduled ones, is listed in Activity.</p>
+      </div>
+      <img class="shot" src="assets/04-activity.webp" width="1600" height="900" loading="lazy"
+           alt="The Activity list, with scheduled syncs marked Sync">
+    </div>
+
+    <div class="extras">
+      <div class="card"><h3>QR code sign-in</h3><p>Scan it from Telegram on your phone, or use your phone number.</p></div>
+      <div class="card"><h3>Private</h3><p>No servers, no tracking. Your sign-in and media stay on your PC.</p></div>
+      <div class="card"><h3>Light or dark</h3><p>Pick a theme or follow Windows.</p></div>
+      <div class="card"><h3>Starts with Windows</h3><p>Optional, so syncs run without opening the app.</p></div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <h2>Questions</h2>
+    <details>
+      <summary>Is this an official Telegram app?</summary>
+      <p>No. Chat Media Collector is an unofficial app. It isn't made by or affiliated with Telegram. It signs in through
+        Telegram's public API, like other third-party Telegram apps.</p>
+    </details>
+    <details>
+      <summary>Is my Telegram sign-in safe?</summary>
+      <p>You sign in directly with Telegram, using a QR code or your phone number. The session is saved encrypted on your
+        PC, and nothing is sent to the app's publisher: there are no servers. You can end the session any time from
+        Telegram on your phone (Settings → Devices). See the <a href="privacy/">privacy policy</a>.</p>
+    </details>
+    <details>
+      <summary>Do I need Unigram?</summary>
+      <p>No. Without Unigram, everything is downloaded from Telegram. With Unigram, files it already downloaded are reused
+        so they aren't downloaded twice.</p>
+    </details>
+    <details>
+      <summary>How is this different from Telegram Desktop's "Export chat history"?</summary>
+      <p>The export is a one-off copy, split into folders by type. Chat Media Collector keeps one folder per chat,
+        numbered in posting order, adds only new posts on later runs, and can keep chats in sync on a schedule.</p>
+    </details>
+    <details>
+      <summary>Where do the files go?</summary>
+      <p>To Pictures\Telegram\&lt;chat name&gt; by default. You can pick a different folder for each chat.</p>
+    </details>
+    <details>
+      <summary>What happens when the trial ends?</summary>
+      <p>The app stops collecting, and everything you saved stays saved. Buy it once in the Microsoft Store to keep
+        collecting.</p>
+    </details>
+    <details>
+      <summary>Which Windows versions does it run on?</summary>
+      <p>Windows 10 version 1809 or later, and Windows 11, on 64-bit (x64) PCs.</p>
+    </details>
+  </section>
+
+  <section class="closing">
+    <h2>Try it free for 7 days</h2>
+    <div class="cta">
+      <a class="badge" href="https://apps.microsoft.com/detail/9PD8CH2DHF9C?referrer=appbadge&amp;mode=direct">
+        <picture>
+          <source srcset="https://get.microsoft.com/images/en-us%20light.svg" media="(prefers-color-scheme: dark)">
+          <img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get it from Microsoft" width="200" height="72">
+        </picture>
+      </a>
+    </div>
+    <p><small>Questions or problems? <a href="mailto:randikav@gmail.com">randikav@gmail.com</a></small></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Orbit Fox Studio · <a href="privacy/">Privacy policy</a> · <a href="mailto:randikav@gmail.com">Support</a></p>
+    <p>Chat Media Collector is an unofficial app. Telegram is a trademark of Telegram FZ-LLC; this app isn't affiliated
+      with Telegram.</p>
+  </div>
+</footer>
+
+</body>
+</html>
